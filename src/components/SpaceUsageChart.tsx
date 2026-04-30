@@ -8,37 +8,52 @@ type Props = {
 const GREEN = "#52c41a";
 const AXIS = "#6b7280";
 
+/** 横向柱状图：长名称不挤横轴，桌面与移动端表现一致 */
 export function SpaceUsageChart({ items }: Props) {
   const names = items.map((i) => i.name);
   const values = items.map((i) => i.value);
 
+  const rowH = 24;
+  const chartHeight = Math.max(260, Math.min(520, 40 + names.length * rowH));
+
   const option = {
     backgroundColor: "transparent",
-    grid: { left: 48, right: 16, top: 24, bottom: 56 },
+    grid: {
+      left: 8,
+      right: 40,
+      top: 16,
+      bottom: 8,
+      containLabel: true,
+    },
     tooltip: {
       trigger: "axis",
+      axisPointer: { type: "shadow" },
       backgroundColor: "rgba(17,17,17,0.95)",
       borderColor: "#2a2a2a",
       textStyle: { color: "#e5e7eb" },
     },
     xAxis: {
-      type: "category",
-      data: names,
-      axisLine: { lineStyle: { color: AXIS } },
-      axisLabel: {
-        color: AXIS,
-        rotate: 35,
-        interval: 0,
-        fontSize: 11,
-      },
-    },
-    yAxis: {
       type: "value",
       axisLine: { show: false },
       splitLine: { lineStyle: { color: "#2a2a2a" } },
-      axisLabel: { color: AXIS },
-      name: "次数",
+      axisLabel: { color: AXIS, fontSize: 11 },
+      name: "次",
       nameTextStyle: { color: AXIS, fontSize: 11 },
+      nameGap: 8,
+    },
+    yAxis: {
+      type: "category",
+      data: names,
+      inverse: true,
+      axisLine: { lineStyle: { color: AXIS } },
+      axisLabel: {
+        color: AXIS,
+        fontSize: 11,
+        width: 96,
+        overflow: "truncate",
+        ellipsis: "…",
+      },
+      axisTick: { show: false },
     },
     series: [
       {
@@ -46,9 +61,15 @@ export function SpaceUsageChart({ items }: Props) {
         data: values,
         itemStyle: {
           color: GREEN,
-          borderRadius: [4, 4, 0, 0],
+          borderRadius: [0, 4, 4, 0],
         },
-        barMaxWidth: 36,
+        barMaxWidth: 22,
+        label: {
+          show: true,
+          position: "right",
+          color: AXIS,
+          fontSize: 11,
+        },
       },
     ],
   };
@@ -62,10 +83,15 @@ export function SpaceUsageChart({ items }: Props) {
   }
 
   return (
-    <ReactECharts
-      option={option}
-      style={{ height: 300, width: "100%" }}
-      opts={{ renderer: "canvas" }}
-    />
+    <div className="space-y-1">
+      <p className="text-xs text-muted-foreground">
+        各空间使用频次（单位：次）
+      </p>
+      <ReactECharts
+        option={option}
+        style={{ height: chartHeight, width: "100%" }}
+        opts={{ renderer: "canvas" }}
+      />
+    </div>
   );
 }

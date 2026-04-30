@@ -7,6 +7,7 @@ type Props = {
 
 export function ActivityTableSection({ overview }: Props) {
   const { totalActivities, totalApplicants, rows } = overview;
+  const scrollBody = rows.length > 10;
 
   return (
     <div className="space-y-3">
@@ -21,17 +22,22 @@ export function ActivityTableSection({ overview }: Props) {
         </span>
       </p>
       <div className="overflow-x-auto rounded-lg border border-border">
-        <table className="w-full min-w-[480px] text-left text-sm">
-          <thead className="bg-secondary/80 text-xs uppercase text-muted-foreground">
-            <tr>
-              <th className="px-3 py-2 font-medium">活动标题</th>
-              <th className="px-3 py-2 font-medium">举办空间</th>
-              <th className="px-3 py-2 font-medium text-right">报名人次</th>
-            </tr>
-          </thead>
-        </table>
-        <div className={rows.length > 10 ? "max-h-[360px] overflow-y-auto" : ""}>
-          <table className="w-full min-w-[480px] text-left text-sm">
+        <div
+          className={scrollBody ? "max-h-[360px] overflow-y-auto" : undefined}
+        >
+          <table className="w-full min-w-[520px] table-fixed border-collapse text-left text-sm">
+            <colgroup>
+              <col className="w-[46%]" />
+              <col className="w-[30%]" />
+              <col className="w-[24%]" />
+            </colgroup>
+            <thead className="sticky top-0 z-10 bg-secondary/95 text-xs uppercase text-muted-foreground backdrop-blur-sm">
+              <tr className="border-b border-border">
+                <th className="px-3 py-2 text-left font-medium">活动标题</th>
+                <th className="px-3 py-2 text-left font-medium">举办空间</th>
+                <th className="px-3 py-2 text-right font-medium">报名人次</th>
+              </tr>
+            </thead>
             <tbody className="divide-y divide-border">
               {rows.length === 0 ? (
                 <tr>
@@ -45,31 +51,35 @@ export function ActivityTableSection({ overview }: Props) {
               ) : (
                 rows.map((r, i) => (
                   <tr key={`${r.title}-${i}`} className="bg-card/60">
-                    <td className="px-3 py-2">
+                    <td className="px-3 py-2 align-top">
                       {r.titleLink ? (
                         <a
                           href={r.titleLink}
-                          className="text-chart-1 hover:underline"
+                          className="line-clamp-2 text-chart-1 hover:underline"
                         >
                           {r.title || "—"}
                         </a>
                       ) : (
-                        <span className="text-chart-1">{r.title || "—"}</span>
+                        <span className="line-clamp-2 text-chart-1">
+                          {r.title || "—"}
+                        </span>
                       )}
                     </td>
-                    <td className="px-3 py-2">
+                    <td className="px-3 py-2 align-top">
                       {r.spaceLink ? (
                         <a
                           href={r.spaceLink}
-                          className="text-chart-1 hover:underline"
+                          className="line-clamp-2 text-chart-1 hover:underline"
                         >
                           {r.space || "—"}
                         </a>
                       ) : (
-                        <span className="text-chart-1">{r.space || "—"}</span>
+                        <span className="line-clamp-2 text-chart-1">
+                          {r.space || "—"}
+                        </span>
                       )}
                     </td>
-                    <td className="px-3 py-2 text-right tabular-nums text-card-foreground">
+                    <td className="px-3 py-2 text-right align-top tabular-nums text-card-foreground">
                       {formatInt(r.applicants)}
                     </td>
                   </tr>
