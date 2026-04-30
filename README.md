@@ -37,13 +37,7 @@ npm run build
 
 ## 环境变量
 
-项目固定请求域名为 `https://daolongtan.cn`，无需配置 API 域名。
-
-`.env` 仅支持可选鉴权 token：
-
-```env
-VITE_API_BEARER_TOKEN=your_token_here
-```
+项目固定请求域名为 `https://daolongtan.cn`，默认无需配置任何环境变量。
 
 参考 `.env.example`（可提交），`.env` 已被 `.gitignore` 忽略（不会上传）。
 

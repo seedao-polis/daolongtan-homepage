@@ -6,19 +6,6 @@ function baseUrl(): string {
   return API_ORIGIN;
 }
 
-function buildHeaders(): HeadersInit {
-  const headers: Record<string, string> = {
-    Accept: "application/json",
-  };
-  const token = import.meta.env.VITE_API_BEARER_TOKEN?.trim();
-  if (token) {
-    headers.Authorization = token.startsWith("Bearer ")
-      ? token
-      : `Bearer ${token}`;
-  }
-  return headers;
-}
-
 function assertBusinessOk(
   json: unknown,
   httpOk: boolean,
@@ -42,16 +29,16 @@ function assertBusinessOk(
     `接口返回 code=${o.code}`;
 
   if (o.code === 401) {
-    throw new Error(
-      `${msg}。公开页如需拉数：在 .env 中配置 VITE_API_BEARER_TOKEN，或使用后台已开放的免登录 OpenAPI（若有）。`,
-    );
+    throw new Error(`${msg}。请确认当前接口是否要求登录或已开放免鉴权访问。`);
   }
   throw new Error(msg);
 }
 
 export async function apiGet<T>(path: string): Promise<T> {
   const url = `${baseUrl()}${API_PREFIX}${path}`;
-  const res = await fetch(url, { headers: buildHeaders() });
+  const res = await fetch(url, {
+    headers: { Accept: "application/json" },
+  });
   const text = await res.text();
   const ct = res.headers.get("content-type") ?? "";
 
