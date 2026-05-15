@@ -6,7 +6,7 @@ export interface MonthStats {
   homestayRevenue?: number;
   activityRevenue?: number;
   netProfit?: number;
-  /** 累计入住人次（若后端在 month-stats 中返回） */
+  /** 累计旅居人次（接口字段兼容，见 homestay-stay-overview） */
   cumulativeCheckIns?: number;
   /** 平均入住天数 */
   avgStayDays?: number;

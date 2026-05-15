@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import {
   fetchActivityOverview,
   fetchHomestayRevenueStats,
@@ -34,6 +34,9 @@ const emptyHomestayStay: HomestayStayOverview = {
   cumulativeCheckIns: 0,
   avgStayDays: 0,
 };
+
+/** 累计统计起始日（上线口径） */
+const CUMULATIVE_START_DATE = "2026-04-01";
 
 function CardHeading({ children }: { children: ReactNode }) {
   return (
@@ -108,12 +111,6 @@ export function DashboardPage() {
     };
   }, []);
 
-  const asOfLabel = useMemo(() => {
-    const d = monthStats.asOfDate?.trim();
-    if (d) return `截至 ${d}`;
-    return `截至 ${formatToday()}`;
-  }, [monthStats.asOfDate]);
-
   return (
     <div className="min-h-full bg-background">
       <header className="sticky top-0 z-20 border-b border-border bg-background/85 backdrop-blur-md supports-[backdrop-filter]:bg-background/70">
@@ -124,7 +121,7 @@ export function DashboardPage() {
           />
           <div className="min-w-0 flex-1">
             <p className="text-xs font-medium text-muted-foreground">
-              自上线以来累计（{asOfLabel}）
+              自上线以来累计（{CUMULATIVE_START_DATE} 至 {formatToday()}）
             </p>
             <h1 className="mt-0.5 text-xl font-semibold tracking-tight text-foreground md:text-2xl">
               数据概览
@@ -149,24 +146,31 @@ export function DashboardPage() {
           </div>
         ) : (
           <div className="space-y-6">
-            <SummaryRow stats={monthStats} />
-
-            <div className="grid gap-4 lg:grid-cols-2">
-              <DashboardCard title={<CardHeading>成员申请统计</CardHeading>}>
-                <MemberApplySection items={members} />
+            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 md:items-stretch">
+              <DashboardCard
+                className="order-1 flex h-full min-h-0 flex-col"
+                bodyClassName="flex min-h-0 flex-1 flex-col justify-start"
+                title={<CardHeading>入住数据统计</CardHeading>}
+              >
+                <DataStatsCards stats={homestayStay} />
               </DashboardCard>
 
-              <DashboardCard title={<CardHeading>数据统计</CardHeading>}>
-                <DataStatsCards stats={homestayStay} />
+              <DashboardCard
+                className="order-2 flex h-full min-h-0 flex-col"
+                title={<CardHeading>成员申请统计</CardHeading>}
+              >
+                <MemberApplySection items={members} />
               </DashboardCard>
             </div>
 
-            <div className="grid gap-4 lg:grid-cols-2">
-              <DashboardCard title={<CardHeading>活动数据概览</CardHeading>}>
+            <SummaryRow stats={monthStats} />
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <DashboardCard className="order-1" title={<CardHeading>活动数据概览</CardHeading>}>
                 <ActivityTableSection overview={activity} />
               </DashboardCard>
 
-              <DashboardCard title={<CardHeading>空间使用统计</CardHeading>}>
+              <DashboardCard className="order-2" title={<CardHeading>空间使用统计</CardHeading>}>
                 <SpaceUsageChart items={spaces} />
               </DashboardCard>
             </div>

@@ -9,20 +9,27 @@ export function DataStatsCards({ stats }: Props) {
   const checkIns = stats.cumulativeCheckIns;
   const days = stats.avgStayDays;
 
+  const cardBase =
+    "flex min-w-0 flex-col justify-start rounded-xl border border-border bg-secondary/40 px-3 py-3 sm:px-4 sm:py-4";
+
   return (
-    <div className="grid h-full grid-cols-1 gap-3 sm:grid-cols-2">
-      <div className="flex min-h-[120px] flex-col justify-center rounded-xl border border-border bg-secondary/40 px-4 py-6">
-        <p className="text-xs font-medium text-muted-foreground">累计入住人次</p>
-        <p className="mt-2 text-3xl font-semibold tabular-nums text-card-foreground">
+    <div className="grid w-full grid-cols-2 gap-2 sm:gap-3">
+      <div className={cardBase}>
+        <p className="text-xs font-medium text-muted-foreground">累计旅居人次</p>
+        <p className="mt-1.5 text-2xl font-semibold tabular-nums text-card-foreground sm:text-3xl">
           {formatInt(checkIns)}{" "}
-          <span className="text-lg font-normal text-muted-foreground">人次</span>
+          <span className="text-base font-normal text-muted-foreground sm:text-lg">
+            人次
+          </span>
         </p>
       </div>
-      <div className="flex min-h-[120px] flex-col justify-center rounded-xl border border-border bg-secondary/40 px-4 py-6">
+      <div className={cardBase}>
         <p className="text-xs font-medium text-muted-foreground">平均入住天数</p>
-        <p className="mt-2 text-3xl font-semibold tabular-nums text-card-foreground">
+        <p className="mt-1.5 text-2xl font-semibold tabular-nums text-card-foreground sm:text-3xl">
           {formatInt(days)}{" "}
-          <span className="text-lg font-normal text-muted-foreground">天</span>
+          <span className="text-base font-normal text-muted-foreground sm:text-lg">
+            天
+          </span>
         </p>
       </div>
     </div>
