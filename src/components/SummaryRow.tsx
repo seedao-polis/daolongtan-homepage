@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import { formatYuan } from "@/lib/format";
+import { DISPLAY_OFFSET, withDisplayOffset } from "@/lib/displayOffsets";
 import type { MonthStats } from "@/api/types";
 
 type StatDef = {
@@ -26,13 +27,15 @@ const accentDot: Record<StatDef["accent"], string> = {
 const STATS: StatDef[] = [
   {
     label: "累计总收入",
-    get: (m) => m.totalRevenue,
+    get: (m) =>
+      withDisplayOffset(m.totalRevenue, DISPLAY_OFFSET.totalRevenue),
     accent: "chart-1",
     icon: <CoinIcon />,
   },
   {
     label: "累计民宿收入",
-    get: (m) => m.homestayRevenue,
+    get: (m) =>
+      withDisplayOffset(m.homestayRevenue, DISPLAY_OFFSET.homestayRevenue),
     accent: "chart-2",
     icon: <HomeIcon />,
   },

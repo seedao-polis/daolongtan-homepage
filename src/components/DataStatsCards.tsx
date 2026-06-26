@@ -1,4 +1,5 @@
 import { formatInt } from "@/lib/format";
+import { DISPLAY_OFFSET, withDisplayOffset } from "@/lib/displayOffsets";
 import type { HomestayStayOverview } from "@/api/types";
 
 type Props = {
@@ -6,7 +7,10 @@ type Props = {
 };
 
 export function DataStatsCards({ stats }: Props) {
-  const checkIns = stats.cumulativeCheckIns;
+  const checkIns = withDisplayOffset(
+    stats.cumulativeCheckIns,
+    DISPLAY_OFFSET.cumulativeCheckIns,
+  );
   const days = stats.avgStayDays;
 
   const cardBase =
